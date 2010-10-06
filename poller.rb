@@ -4,8 +4,9 @@ require 'xmlsimple'
 require 'mechanize'
 
 $project_name = ARGV[0]
-$username = ARGV[1]
-$password = ARGV[2]
+$hostname = ARGV[1]
+$username = ARGV[2]
+$password = ARGV[3]
 
 # NB: currently throws errors to cron if build server is down
 # NB: keeps track of build number on disk, so if build server is reset this script gets screwy
@@ -13,7 +14,7 @@ $password = ARGV[2]
 DATA_FILE = File.join(File.dirname(__FILE__), "build_poller.#{$project_name}.data")
 
 class Poller
-  CURRENT_BUILD_URL = "http://ci.efficiency20.com/j_acegi_security_check?j_username=#{$username}&j_password=#{$password}&from=%2Fjob%2F#{$project_name}%2Fapi%2Fxml%3Fdepth%3D1%26xpath%3D%2F%2Fbuild%5Bresult%3D%2527SUCCESS%2527%2520or%2520result%3D%2527FAILURE%2527%5D%5B1%5D"
+  CURRENT_BUILD_URL = "http://#{$hostname}/j_acegi_security_check?j_username=#{$username}&j_password=#{$password}&from=%2Fjob%2F#{$project_name}%2Fapi%2Fxml%3Fdepth%3D1%26xpath%3D%2F%2Fbuild%5Bresult%3D%2527SUCCESS%2527%2520or%2520result%3D%2527FAILURE%2527%5D%5B1%5D"
 
   def self.execute
     if File.exist?(DATA_FILE)
